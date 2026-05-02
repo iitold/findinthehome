@@ -87,7 +87,10 @@ export async function DELETE(request, { params }) {
 
     const adminClient = createAdminClient();
 
-    // Xóa profile trước (cascade sẽ xóa entities)
+    // 1. Xóa toàn bộ entities của user này trước (để tránh lỗi Foreign Key)
+    await adminClient.from('entities').delete().eq('user_id', id);
+
+    // 2. Xóa profile
     await adminClient.from('profiles').delete().eq('id', id);
 
     // Xóa auth user

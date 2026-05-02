@@ -22,7 +22,7 @@ $$;
 -- ===================
 CREATE TABLE entities (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id         UUID NOT NULL REFERENCES auth.users(id),
+  user_id         UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   name            TEXT NOT NULL,
   type            TEXT NOT NULL CHECK (type IN ('house', 'floor', 'room', 'container', 'item')),
   parent_id       UUID REFERENCES entities(id) ON DELETE CASCADE,
