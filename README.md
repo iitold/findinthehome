@@ -10,6 +10,13 @@
 
 Designed as a modern Family Assistant, the application focuses on the core experience: **Lightning-fast search with precise room-level navigation**.
 
+### 🌐 Live Demo
+Experience the application directly:
+- **URL**: [https://findinthehome.vercel.app](https://findinthehome.vercel.app)
+- **Admin Email**: `itold@demo.com`
+- **Password**: `Itold@2026`
+*(Note: Use this admin account to access the Admin Panel, manage users, and edit the floor plan.)*
+
 ### ✨ Key Features
 - 🗺️ **Drag & Drop Canvas Mapping**: Design your floor plan with Walls, Doors, Windows, Rooms, and Containers directly in the browser using Konva.js.
 - 🔍 **Hero Search & Zoom-to-Room**: An intelligent search bar. Upon finding an item, the map automatically flies (zooms) to the containing room and highlights it for instant orientation.
@@ -75,6 +82,13 @@ Since this app is built with Next.js, deploying it to Vercel is the optimal and 
 **Find in the Home** là một ứng dụng web thông minh giúp bạn số hóa sơ đồ ngôi nhà, đánh dấu vị trí các kệ tủ và ghi chú chính xác nơi bạn cất giữ đồ đạc. Không bao giờ còn tình trạng "bới tung cả nhà để tìm một chiếc kéo" nữa!
 
 Được thiết kế với phong cách hiện đại, trực quan như một trợ lý gia đình (Family Assistant), ứng dụng tập trung vào trải nghiệm cốt lõi: **Tìm kiếm cực nhanh và dẫn đường chính xác đến tận phòng**.
+
+### 🌐 Dùng thử (Live Demo)
+Trải nghiệm trực tiếp ứng dụng tại:
+- **Đường dẫn**: [https://findinthehome.vercel.app](https://findinthehome.vercel.app)
+- **Tài khoản Admin**: `itold@demo.com`
+- **Mật khẩu**: `Itold@2026`
+*(Lưu ý: Dùng tài khoản admin này để truy cập Admin Panel, quản lý thành viên, và chỉnh sửa sơ đồ nhà.)*
 
 ### ✨ Tính Năng Nổi Bật
 - 🗺️ **Bản Đồ Canvas Kéo Thả (Drag & Drop)**: Tự thiết kế sơ đồ nhà với Tường, Cửa, Cửa Sổ, Phòng, và Kệ/Tủ trực tiếp trên trình duyệt bằng Konva.js.

@@ -1,17 +1,26 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 
 export function useAuth() {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
+  const supabaseRef = useRef(null);
+
+  // Lazy init — only create client on the browser
+  const getSupabase = () => {
+    if (!supabaseRef.current) {
+      supabaseRef.current = createClient();
+    }
+    return supabaseRef.current;
+  };
 
   // Lấy profile từ bảng profiles
   const fetchProfile = async (userId) => {
-    if (!userId) { setProfile(null); return; }
+    const supabase = getSupabase();
+    if (!userId || !supabase) { setProfile(null); return; }
     const { data } = await supabase
       .from('profiles')
       .select('*')
@@ -21,6 +30,9 @@ export function useAuth() {
   };
 
   useEffect(() => {
+    const supabase = getSupabase();
+    if (!supabase) { setLoading(false); return; }
+
     // Lấy session hiện tại
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
@@ -43,6 +55,8 @@ export function useAuth() {
   }, []);
 
   const signIn = async (email, password) => {
+    const supabase = getSupabase();
+    if (!supabase) return { data: null, error: { message: 'Supabase not initialized' } };
     const { data, error } = await supabase.auth.signInWithPassword({
       email, password,
     });
@@ -50,6 +64,8 @@ export function useAuth() {
   };
 
   const signUp = async (email, password) => {
+    const supabase = getSupabase();
+    if (!supabase) return { data: null, error: { message: 'Supabase not initialized' } };
     const { data, error } = await supabase.auth.signUp({
       email, password,
     });
@@ -67,6 +83,8 @@ export function useAuth() {
   };
 
   const signOut = async () => {
+    const supabase = getSupabase();
+    if (!supabase) return { error: { message: 'Supabase not initialized' } };
     const { error } = await supabase.auth.signOut();
     setProfile(null);
     return { error };
