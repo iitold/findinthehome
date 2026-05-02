@@ -42,6 +42,7 @@ Designed as a modern Family Assistant, the application focuses on the core exper
    ```env
    NEXT_PUBLIC_SUPABASE_URL=https://[YOUR_PROJECT_ID].supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=[YOUR_ANON_KEY]
+   SUPABASE_SERVICE_ROLE_KEY=[YOUR_SERVICE_ROLE_KEY]
    ```
 
 #### 3. Run the application
@@ -58,9 +59,10 @@ Since this app is built with Next.js, deploying it to Vercel is the optimal and 
 1. Push this repository to your **GitHub** account.
 2. Log in to [Vercel](https://vercel.com/), select **Add New...** -> **Project**.
 3. Select the `findinthehome` repository from your GitHub and click **Import**.
-4. In the **Environment Variables** section, add your 2 Supabase keys:
+4. In the **Environment Variables** section, add your 3 Supabase keys:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY` (Required for Admin functionalities like managing users)
 5. Click **Deploy** and wait a few minutes.
 6. 🎉 **Done!** Vercel will provide you with a `.vercel.app` URL to access your app from anywhere.
 
@@ -106,6 +108,7 @@ Since this app is built with Next.js, deploying it to Vercel is the optimal and 
    ```env
    NEXT_PUBLIC_SUPABASE_URL=https://[YOUR_PROJECT_ID].supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=[YOUR_ANON_KEY]
+   SUPABASE_SERVICE_ROLE_KEY=[YOUR_SERVICE_ROLE_KEY]
    ```
 
 #### 3. Chạy ứng dụng
@@ -122,9 +125,10 @@ Vì ứng dụng được xây dựng bằng Next.js, việc đưa nó lên mạ
 1. Đẩy mã nguồn này lên kho lưu trữ **GitHub** của bạn.
 2. Đăng nhập vào [Vercel](https://vercel.com/), chọn **Add New...** -> **Project**.
 3. Chọn kho lưu trữ `findinthehome` từ GitHub của bạn và bấm **Import**.
-4. Ở phần **Environment Variables**, hãy thêm đúng 2 biến môi trường bạn đã lấy từ Supabase:
+4. Ở phần **Environment Variables**, hãy thêm đúng 3 biến môi trường bạn đã lấy từ Supabase:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY` (Bắt buộc để tính năng Admin Panel như thêm/xoá/đổi mật khẩu User hoạt động)
 5. Bấm **Deploy** và đợi vài phút.
 6. 🎉 **Hoàn tất!** Vercel sẽ cung cấp cho bạn một đường link `.vercel.app` để truy cập ứng dụng từ bất cứ đâu.
 
