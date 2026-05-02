@@ -1,0 +1,133 @@
+{
+  "app": {
+    "title": "Find in the Home",
+    "description": "Organize and find everything in your house"
+  },
+  "auth": {
+    "login": "Log In",
+    "signup": "Sign Up",
+    "logout": "Log Out",
+    "email": "Email",
+    "password": "Password",
+    "loginTitle": "Welcome Back",
+    "signupTitle": "Create Account",
+    "loginSubtitle": "Sign in to manage your home",
+    "signupSubtitle": "Start organizing your home today",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "loginError": "Invalid email or password",
+    "signupError": "Could not create account"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "search": "Search",
+    "settings": "Settings",
+    "list": "List",
+    "menu": "Menu",
+    "home": "Home"
+  },
+  "entity": {
+    "house": "House",
+    "floor": "Floor",
+    "room": "Room",
+    "container": "Container",
+    "item": "Item",
+    "door": "Door",
+    "window": "Window",
+    "addHouse": "Add House",
+    "addFloor": "Add Floor",
+    "addRoom": "Add Room",
+    "addContainer": "Add Container",
+    "addItem": "Add Item",
+    "addDoor": "Add Door",
+    "addWindow": "Add Window",
+    "name": "Name",
+    "type": "Type",
+    "description": "Description",
+    "tags": "Tags",
+    "color": "Color",
+    "icon": "Icon",
+    "position": "Position",
+    "dimensions": "Dimensions",
+    "level": "Level",
+    "delete": "Delete",
+    "edit": "Edit",
+    "move": "Move",
+    "save": "Save",
+    "cancel": "Cancel",
+    "subContainers": "Sub-containers",
+    "itemsList": "Items inside",
+    "containerEmpty": "Nothing inside.",
+    "confirmDelete": "Are you sure you want to delete this? All children will also be deleted.",
+    "noEntities": "No items yet. Start by adding a house!",
+    "selectHouse": "Select a house",
+    "manageHouses": "Manage Houses",
+    "manageFloors": "Floors",
+    "addHouseNew": "Add New House",
+    "addFloorNew": "Add New Floor",
+    "configureHouse": "Configure House",
+    "configureFloor": "Configure Floor",
+    "noHousePrompt": "No house found. Please add a House to start.",
+    "noFloorPrompt": "No floor found in the house. Please add the first Floor.",
+    "noFloorHelper": "No floors yet. Click 'Add New Floor' next to this."
+  },
+  "canvas": {
+    "editMode": "Edit",
+    "searchMode": "Search",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out",
+    "fitView": "Fit View",
+    "addHere": "Add Here",
+    "addDoor": "Add Door",
+    "addWindow": "Add Window"
+  },
+  "theme": {
+    "dark": "Switch to Light Mode",
+    "light": "Switch to Dark Mode"
+  },
+  "search": {
+    "placeholder": "Search for items... (e.g., scissors, remote)",
+    "searching": "Searching...",
+    "noResults": "No items found",
+    "results": "results",
+    "result": "result",
+    "locateOnMap": "Locate on map",
+    "path": "Path"
+  },
+  "floor": {
+    "switchFloor": "Switch Floor",
+    "noFloors": "No floors added yet"
+  },
+  "toast": {
+    "created": "Created successfully",
+    "updated": "Updated successfully",
+    "deleted": "Deleted successfully",
+    "moved": "Moved successfully",
+    "error": "Something went wrong",
+    "networkError": "Network error. Please try again.",
+    "retry": "Retry"
+  },
+  "errors": {
+    "ENTITY_NOT_FOUND": "Item not found",
+    "INVALID_PARENT": "Invalid parent location",
+    "CIRCULAR_REFERENCE": "Cannot move item inside itself",
+    "INVALID_TYPE_HIERARCHY": "This type cannot be placed here",
+    "VALIDATION_ERROR": "Please check your input",
+    "TRANSACTION_FAILED": "Operation failed. Please try again.",
+    "UNAUTHORIZED": "Please log in to continue"
+  },
+  "admin": {
+    "title": "User Management",
+    "addUser": "Add User",
+    "editUser": "Edit User",
+    "deleteUser": "Delete User",
+    "resetPassword": "Reset Password",
+    "newPassword": "New Password",
+    "passwordReset": "Password reset successfully",
+    "role": "Role",
+    "fullName": "Full Name",
+    "confirmDelete": "Are you sure you want to delete user {email}? All their data will be lost.",
+    "cannotDeleteSelf": "Cannot delete your own account",
+    "cannotDemoteSelf": "Cannot demote your own account"
+  }
+}
