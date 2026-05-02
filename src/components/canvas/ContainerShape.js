@@ -79,17 +79,20 @@ export default function ContainerShape({
       opacity={opacity}
       onClick={() => onSelect?.(entity)}
       onTap={() => onSelect?.(entity)}
-      onDragStart={() => {
+      onDragStart={(e) => {
+        e.cancelBubble = true;
         if (!editMode) return;
         onDragStart?.(entity.id);
       }}
       onDragMove={(e) => {
+        e.cancelBubble = true;
         if (!editMode) return;
         const newX = (e.target.x() - PADDING) / METERS_TO_PIXELS;
         const newY = (e.target.y() - PADDING) / METERS_TO_PIXELS;
         onDragMove?.(entity.id, newX, newY);
       }}
       onDragEnd={(e) => {
+        e.cancelBubble = true;
         if (!editMode) return;
         const newX = (e.target.x() - PADDING) / METERS_TO_PIXELS;
         const newY = (e.target.y() - PADDING) / METERS_TO_PIXELS;

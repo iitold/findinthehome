@@ -34,6 +34,8 @@
     "item": "Item",
     "door": "Door",
     "window": "Window",
+    "furniture": "Furniture",
+    "wall": "Wall",
     "addHouse": "Add House",
     "addFloor": "Add Floor",
     "addRoom": "Add Room",

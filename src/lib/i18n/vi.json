@@ -34,6 +34,8 @@
     "item": "Đồ vật",
     "door": "Cửa",
     "window": "Cửa sổ",
+    "furniture": "Nội thất",
+    "wall": "Tường",
     "addHouse": "Thêm nhà",
     "addFloor": "Thêm tầng",
     "addRoom": "Thêm phòng",
