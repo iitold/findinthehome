@@ -222,6 +222,7 @@ export default function FloorCanvas({
               onDragEnd={onDragEnd}
               editMode={isEditMode}
               isDragged={draggedEntityId === entity.id}
+              dragLocked={!!draggedEntityId && draggedEntityId !== entity.id}
               isDropTarget={dropTargetId === entity.id}
               isValidDrop={isValidDrop}
               theme={theme}
@@ -240,6 +241,7 @@ export default function FloorCanvas({
               onDragMove={onDragMove}
               onDragEnd={onDragEnd}
               editMode={isEditMode}
+              dragLocked={!!draggedEntityId && draggedEntityId !== entity.id}
               theme={theme}
             />
           ))}
@@ -255,6 +257,7 @@ export default function FloorCanvas({
               onDragMove={onDragMove}
               onDragEnd={onDragEnd}
               editMode={isEditMode}
+              dragLocked={!!draggedEntityId && draggedEntityId !== entity.id}
               theme={theme}
             />
           ))}
@@ -272,6 +275,7 @@ export default function FloorCanvas({
               onDragEnd={onDragEnd}
               editMode={isEditMode}
               isDragged={draggedEntityId === entity.id}
+              dragLocked={!!draggedEntityId && draggedEntityId !== entity.id}
               isDropTarget={dropTargetId === entity.id}
               isValidDrop={isValidDrop}
               theme={theme}
@@ -291,6 +295,7 @@ export default function FloorCanvas({
               onDragEnd={onDragEnd}
               editMode={isEditMode}
               isDragged={draggedEntityId === entity.id}
+              dragLocked={!!draggedEntityId && draggedEntityId !== entity.id}
               isDropTarget={dropTargetId === entity.id}
               isValidDrop={isValidDrop}
               theme={theme}

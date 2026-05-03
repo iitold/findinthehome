@@ -19,6 +19,7 @@ export default function ItemShape({
   onDragEnd,
   editMode,
   isDragged,
+  dragLocked,
   isDropTarget,
   isValidDrop,
   theme = 'dark',
@@ -92,7 +93,8 @@ export default function ItemShape({
     <Group
       x={x}
       y={y}
-      draggable={editMode}
+      draggable={editMode && !dragLocked}
+      listening={!dragLocked}
       opacity={opacity}
       onClick={() => onSelect?.(entity)}
       onTap={() => onSelect?.(entity)}

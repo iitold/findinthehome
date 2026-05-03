@@ -17,6 +17,7 @@ export default function ContainerShape({
   onDragEnd,
   editMode,
   isDragged,
+  dragLocked,
   isDropTarget,
   isValidDrop,
   theme = 'dark',
@@ -75,7 +76,8 @@ export default function ContainerShape({
       name="resizable"
       x={x}
       y={y}
-      draggable={editMode}
+      draggable={editMode && !dragLocked}
+      listening={!dragLocked}
       opacity={opacity}
       onClick={() => onSelect?.(entity)}
       onTap={() => onSelect?.(entity)}

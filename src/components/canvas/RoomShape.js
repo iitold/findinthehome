@@ -17,6 +17,7 @@ export default function RoomShape({
   onDragEnd,
   editMode,
   isDragged,
+  dragLocked,
   isDropTarget,
   isValidDrop,
   theme = 'dark',
@@ -77,7 +78,8 @@ export default function RoomShape({
       name="resizable"
       x={x}
       y={y}
-      draggable={editMode}
+      draggable={editMode && !dragLocked}
+      listening={!dragLocked}
       opacity={opacity}
       onClick={() => onSelect?.(entity)}
       onTap={() => onSelect?.(entity)}

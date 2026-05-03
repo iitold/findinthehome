@@ -14,6 +14,7 @@ export default function WindowShape({
   onDragMove,
   onDragEnd,
   editMode,
+  dragLocked,
   theme = 'dark'
 }) {
   const x = entity.x * METERS_TO_PIXELS;
@@ -35,7 +36,8 @@ export default function WindowShape({
       x={x}
       y={y}
       rotation={rotation}
-      draggable={editMode && !entity.is_fixed}
+      draggable={editMode && !entity.is_fixed && !dragLocked}
+      listening={!dragLocked}
       id={entity.id}
       onClick={(e) => {
         e.cancelBubble = true;
