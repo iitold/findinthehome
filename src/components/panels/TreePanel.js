@@ -81,7 +81,7 @@ function TreeNode({ node, depth, selectedEntity, onSelectEntity, onExpandNode, t
     <div className="tree-node">
       <button
         className={`tree-node-row ${isSelected ? 'tree-node-selected' : ''}`}
-        style={{ paddingLeft: 8 + depth * 10 }}
+        style={{ paddingLeft: 6 }}
         onClick={() => onSelectEntity(node)}
       >
         {hasChildren ? (
