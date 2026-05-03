@@ -18,7 +18,7 @@ export default function SearchResults({ results, totalCount, searchType, onResul
   if (results.length === 0) {
     return (
       <div className="search-empty">
-        <Package size={48} strokeWidth={1} />
+        <Package size={32} strokeWidth={1} />
         <p>{t('search.noResults')}</p>
       </div>
     );
@@ -54,7 +54,7 @@ export default function SearchResults({ results, totalCount, searchType, onResul
               }}
             >
               <div className="search-result-icon" style={{ color: result.color }}>
-                <Icon size={20} />
+                <Icon size={16} />
               </div>
               <div className="search-result-info">
                 <span className="search-result-name">{result.name}</span>
@@ -64,7 +64,7 @@ export default function SearchResults({ results, totalCount, searchType, onResul
                 />
               </div>
               <div className="search-result-action">
-                <MapPin size={16} />
+                <MapPin size={14} />
               </div>
             </div>
           );

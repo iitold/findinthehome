@@ -9,23 +9,23 @@ export default function HouseView({ houses, floors, onAddFloor, onAddHouse, onEd
   const { t } = useTranslation();
 
   return (
-    <div className="house-view" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem', overflowY: 'auto' }}>
+    <div className="house-view" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', flex: 1, minHeight: 0 }}>
       
       {/* HERO SEARCH */}
       {houses.length > 0 && (
-        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '16px' }}>Hôm nay bạn cần tìm gì?</h1>
-          <div style={{ position: 'relative', maxWidth: '600px', margin: '0 auto' }}>
-            <Search size={20} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+        <div style={{ textAlign: 'center', marginBottom: '8px' }}>
+          <h1 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '12px' }}>Hôm nay bạn cần tìm gì?</h1>
+          <div style={{ position: 'relative', maxWidth: '500px', margin: '0 auto' }}>
+            <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
             <input
               type="text"
               placeholder={t('search.placeholder') || "Tìm chìa khóa, kéo, remote..."}
               onChange={(e) => onSearch?.(e.target.value)}
               style={{
-                width: '100%', padding: '16px 20px 16px 48px', fontSize: '16px',
-                borderRadius: '30px', border: '1px solid var(--border)',
+                width: '100%', padding: '10px 16px 10px 38px', fontSize: '13px',
+                borderRadius: '20px', border: '1px solid var(--border)',
                 background: 'var(--bg-secondary)', color: 'var(--text-primary)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.05)', outline: 'none',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)', outline: 'none',
                 transition: 'border-color 0.2s, box-shadow 0.2s'
               }}
               onFocus={(e) => e.target.style.borderColor = 'var(--accent)'}
@@ -36,18 +36,18 @@ export default function HouseView({ houses, floors, onAddFloor, onAddHouse, onEd
       )}
 
       {houses.length === 0 && (
-        <div style={{ padding: '2rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', width: '100%', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px solid var(--border)' }}>
+        <div style={{ padding: '16px', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', width: '100%', background: 'var(--panel-bg)', borderRadius: '10px', border: '1px solid var(--border)' }}>
           <p>{t('entity.noHousePrompt')}</p>
           {isAdmin && (
             <button 
               onClick={onAddHouse}
               style={{
-                padding: '10px 20px', background: 'var(--accent)', color: 'white',
-                border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: '8px'
+                padding: '7px 14px', background: 'var(--accent)', color: 'white',
+                border: 'none', borderRadius: '6px', fontWeight: 600, cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px'
               }}
             >
-              <Home size={18} /> {t('entity.addHouseNew')}
+              <Home size={14} /> {t('entity.addHouseNew')}
             </button>
           )}
         </div>
@@ -57,14 +57,14 @@ export default function HouseView({ houses, floors, onAddFloor, onAddHouse, onEd
         const houseFloors = floors.filter(f => f.parent_id === house.id);
 
         return (
-          <div key={house.id} style={{ border: '1px solid var(--border)', borderRadius: '12px', padding: '1.5rem', background: 'var(--bg-glass)' }}>
-            {/* Header: Thông tin ngôi nhà */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ background: 'var(--panel-bg)', padding: '0.5rem', borderRadius: '8px', border: '1px solid var(--border)' }}>
-                  <Home size={28} color={house.color || 'var(--accent)'} />
+          <div key={house.id} style={{ border: '1px solid var(--border)', borderRadius: '10px', padding: '12px', background: 'var(--bg-glass)' }}>
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ background: 'var(--panel-bg)', padding: '6px', borderRadius: '6px', border: '1px solid var(--border)' }}>
+                  <Home size={20} color={house.color || 'var(--accent)'} />
                 </div>
-                <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 600 }}>{house.name}</h2>
+                <h2 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>{house.name}</h2>
               </div>
               {isAdmin && (
                 <button
@@ -75,16 +75,16 @@ export default function HouseView({ houses, floors, onAddFloor, onAddHouse, onEd
                   className="toolbar-btn"
                   title={t('entity.configureHouse')}
                 >
-                  <Settings size={18} />
+                  <Settings size={14} />
                 </button>
               )}
             </div>
 
-            {/* Content: Danh sách Tầng */}
-            <h3 style={{ fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
+            {/* Content */}
+            <h3 style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-secondary)', marginBottom: '8px' }}>
               {t('entity.manageFloors')}
             </h3>
-            <div style={{ display: 'grid', gap: '12px', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
+            <div style={{ display: 'grid', gap: '8px', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
               {houseFloors.map(floor => (
                 <div 
                   key={floor.id} 
@@ -93,23 +93,23 @@ export default function HouseView({ houses, floors, onAddFloor, onAddHouse, onEd
                   style={{
                     background: 'var(--panel-bg)',
                     border: '1px solid var(--border)',
-                    borderRadius: '12px',
-                    padding: '16px',
+                    borderRadius: '8px',
+                    padding: '10px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '16px',
+                    gap: '10px',
                     transition: 'all 0.2s ease'
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'none'; }}
                 >
-                  <div style={{ width: 40, height: 40, borderRadius: '10px', background: 'var(--bg-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Layers size={20} color={floor.color || 'var(--accent)'} />
+                  <div style={{ width: 32, height: 32, borderRadius: '8px', background: 'var(--bg-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Layers size={16} color={floor.color || 'var(--accent)'} />
                   </div>
                   <div style={{ flex: 1 }}>
-                    <h3 style={{ margin: '0 0 4px 0', fontSize: '15px', fontWeight: 600 }}>{floor.name}</h3>
-                    <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-secondary)' }}>{floor.description || `Z-Index: ${floor.z}`}</p>
+                    <h3 style={{ margin: '0 0 2px 0', fontSize: '13px', fontWeight: 600 }}>{floor.name}</h3>
+                    <p style={{ margin: 0, fontSize: '11px', color: 'var(--text-secondary)' }}>{floor.description || `Z-Index: ${floor.z}`}</p>
                   </div>
                   {isAdmin && (
                     <button
@@ -120,13 +120,13 @@ export default function HouseView({ houses, floors, onAddFloor, onAddHouse, onEd
                       className="btn-icon"
                       title={t('entity.configureFloor')}
                     >
-                      <Settings size={16} />
+                      <Settings size={14} />
                     </button>
                   )}
                 </div>
               ))}
 
-              {/* Nút thêm Tầng mới cho nhà này */}
+              {/* Add floor */}
               {isAdmin && (
                 <div 
                   className="floor-card"
@@ -134,29 +134,29 @@ export default function HouseView({ houses, floors, onAddFloor, onAddHouse, onEd
                   style={{
                     background: 'var(--bg-glass)',
                     border: '1px dashed var(--border)',
-                    borderRadius: '12px',
-                    padding: '16px',
+                    borderRadius: '8px',
+                    padding: '10px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '16px',
+                    gap: '10px',
                     opacity: 0.7,
                     transition: 'all 0.2s ease'
                   }}
                   onMouseEnter={(e) => { e.currentTarget.style.opacity = 1; e.currentTarget.style.borderColor = 'var(--accent)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.opacity = 0.7; e.currentTarget.style.borderColor = 'var(--border)'; }}
                 >
-                  <div style={{ width: 40, height: 40, borderRadius: '10px', background: 'var(--bg-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Layers size={20} color="var(--text-secondary)" />
+                  <div style={{ width: 32, height: 32, borderRadius: '8px', background: 'var(--bg-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Layers size={16} color="var(--text-secondary)" />
                   </div>
                   <div style={{ flex: 1 }}>
-                    <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 500, color: 'var(--text-secondary)' }}>{t('entity.addFloorNew')}</h3>
+                    <h3 style={{ margin: 0, fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)' }}>{t('entity.addFloorNew')}</h3>
                   </div>
                 </div>
               )}
 
               {!isAdmin && houseFloors.length === 0 && (
-                <div style={{ padding: '1rem', color: 'var(--text-secondary)' }}>
+                <div style={{ padding: '8px', color: 'var(--text-secondary)', fontSize: '12px' }}>
                   {t('entity.noFloorHelper')}
                 </div>
               )}
@@ -165,16 +165,16 @@ export default function HouseView({ houses, floors, onAddFloor, onAddHouse, onEd
         );
       })}
 
-      {/* Tách biệt hoàn toàn nút thêm Ngôi nhà thứ 2, 3... */}
+      {/* Add house button */}
       {isAdmin && houses.length > 0 && (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '8px' }}>
           <button 
             onClick={onAddHouse}
             className="toolbar-btn"
-            style={{ padding: '10px 20px', display: 'flex', alignItems: 'center', gap: '8px', borderRadius: '8px', background: 'var(--panel-bg)', border: '1px dashed var(--accent)' }}
+            style={{ padding: '7px 14px', display: 'flex', alignItems: 'center', gap: '6px', borderRadius: '6px', background: 'var(--panel-bg)', border: '1px dashed var(--accent)' }}
           >
-            <Home size={18} color="var(--accent)" />
-            <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{t('entity.addHouseNew')}</span>
+            <Home size={14} color="var(--accent)" />
+            <span style={{ color: 'var(--accent)', fontWeight: 600, fontSize: '12px' }}>{t('entity.addHouseNew')}</span>
           </button>
         </div>
       )}

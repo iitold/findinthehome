@@ -21,16 +21,16 @@ export default function ContainerView({ container, entities }) {
   const items = children.filter(e => e.type === 'item');
 
   return (
-    <div className="container-view" style={{ padding: '2rem', height: '100%', overflowY: 'auto' }}>
-      <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem' }}>
-        <Package color="var(--accent)" />
+    <div className="container-view" style={{ padding: '16px', flex: 1, minHeight: 0, overflowY: 'auto' }}>
+      <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', fontSize: '16px', fontWeight: 600 }}>
+        <Package size={20} color="var(--accent)" />
         {container.name}
       </h2>
 
       {shelvesAndBoxes.length > 0 && (
-        <div style={{ marginBottom: '2rem' }}>
-          <h3>{t('entity.subContainers')}</h3>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+        <div style={{ marginBottom: '16px' }}>
+          <h3 style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-secondary)', marginBottom: '8px' }}>{t('entity.subContainers')}</h3>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {shelvesAndBoxes.map(sub => (
               <div 
                 key={sub.id} 
@@ -38,17 +38,17 @@ export default function ContainerView({ container, entities }) {
                 onClick={() => navigateTo(sub)}
                 style={{
                   background: 'var(--panel-bg)', border: '1px solid var(--border)',
-                  borderRadius: '8px', padding: '1.5rem', width: '200px',
-                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '1rem',
+                  borderRadius: '8px', padding: '10px', width: '170px',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px',
                   transition: 'background 0.2s'
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-hover)'}
                 onMouseLeave={(e) => e.currentTarget.style.background = 'var(--panel-bg)'}
               >
-                <Box color={sub.color || 'var(--text-secondary)'} />
+                <Box size={16} color={sub.color || 'var(--text-secondary)'} />
                 <div>
-                  <div style={{ fontWeight: 'bold' }}>{sub.name}</div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{t('entity.level')}: {sub.level}</div>
+                  <div style={{ fontWeight: 600, fontSize: '12px' }}>{sub.name}</div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-secondary)' }}>{t('entity.level')}: {sub.level}</div>
                 </div>
               </div>
             ))}
@@ -58,8 +58,8 @@ export default function ContainerView({ container, entities }) {
 
       {items.length > 0 && (
         <div>
-          <h3>{t('entity.itemsList')}</h3>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+          <h3 style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-secondary)', marginBottom: '8px' }}>{t('entity.itemsList')}</h3>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {items.map(item => (
               <div 
                 key={item.id} 
@@ -67,8 +67,8 @@ export default function ContainerView({ container, entities }) {
                 onClick={() => setSelectedEntity(item)}
                 style={{
                   background: 'var(--panel-bg)', border: '1px solid var(--border)',
-                  borderRadius: '8px', padding: '1rem', width: '150px',
-                  cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem',
+                  borderRadius: '8px', padding: '10px', width: '120px',
+                  cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
                   transition: 'background 0.2s, borderColor 0.2s'
                 }}
                 onMouseEnter={(e) => {
@@ -80,14 +80,14 @@ export default function ContainerView({ container, entities }) {
                   e.currentTarget.style.borderColor = 'var(--border)';
                 }}
               >
-                <div style={{ width: 40, height: 40, borderRadius: '50%', background: item.color || 'var(--bg-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 32, height: 32, borderRadius: '50%', background: item.color || 'var(--bg-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {(() => {
-                    if (!item.icon) return <Search size={20} color="var(--text-primary)" />;
+                    if (!item.icon) return <Search size={14} color="var(--text-primary)" />;
                     const IconComp = getLucideComponent(item.icon, Search);
-                    return <IconComp size={20} color="var(--text-primary)" />;
+                    return <IconComp size={14} color="var(--text-primary)" />;
                   })()}
                 </div>
-                <div style={{ fontWeight: 'bold', textAlign: 'center', fontSize: '0.9rem' }}>{item.name}</div>
+                <div style={{ fontWeight: 600, textAlign: 'center', fontSize: '11px' }}>{item.name}</div>
               </div>
             ))}
           </div>
@@ -95,7 +95,7 @@ export default function ContainerView({ container, entities }) {
       )}
 
       {children.length === 0 && (
-        <div style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+        <div style={{ color: 'var(--text-secondary)', fontStyle: 'italic', fontSize: '12px' }}>
           {t('entity.containerEmpty')}
         </div>
       )}

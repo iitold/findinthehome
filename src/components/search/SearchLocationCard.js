@@ -18,21 +18,21 @@ export default function SearchLocationCard({ result, onClose, onNavigate }) {
   return (
     <div className="search-location-card">
       <div className="location-card-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div className="location-card-icon" style={{ backgroundColor: result.color || 'var(--accent)', color: '#fff' }}>
-            <Icon size={20} />
+            <Icon size={16} />
           </div>
           <div>
-            <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)' }}>
+            <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>
               {result.name}
             </h3>
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+            <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '1px' }}>
               Kết quả tìm kiếm
             </div>
           </div>
         </div>
         <button onClick={onClose} className="btn-icon" title="Đóng">
-          <X size={20} />
+          <X size={16} />
         </button>
       </div>
 
@@ -51,7 +51,7 @@ export default function SearchLocationCard({ result, onClose, onNavigate }) {
                   className={`breadcrumb-btn ${isLast ? 'active' : ''}`}
                   title={`Đi tới ${name}`}
                 >
-                  <PathIcon size={12} style={{ marginRight: '4px' }} />
+                  <PathIcon size={10} style={{ marginRight: '3px' }} />
                   {name}
                 </button>
                 {!isLast && <ChevronRight size={14} style={{ color: 'var(--text-muted)', margin: '0 4px' }} />}

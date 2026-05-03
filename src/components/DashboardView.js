@@ -448,7 +448,7 @@ export default function Dashboard() {
     <div className="dashboard-layout">
       {/* GLOBAL HEADER */}
       <header className="dashboard-header" style={{ zIndex: 100 }}>
-        <div className="dashboard-title-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div className="dashboard-title-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <div 
             className="dashboard-title" 
             onClick={() => {
@@ -460,7 +460,7 @@ export default function Dashboard() {
             style={{ cursor: 'pointer' }}
             title={t('nav.home') || 'Trang chủ'}
           >
-            <HousePlus size={20} style={{ color: 'var(--accent)' }} />
+            <HousePlus size={16} style={{ color: 'var(--accent)' }} />
             <span className="hide-on-mobile">{t('app.title')}</span>
           </div>
         </div>
@@ -475,7 +475,7 @@ export default function Dashboard() {
               title={canvas.mode === 'edit' ? t('canvas.viewMode') : t('canvas.editMode')}
               style={{ color: canvas.mode === 'edit' ? 'var(--accent)' : 'inherit' }}
             >
-              <Edit3 size={18} />
+              <Edit3 size={16} />
             </button>
           )}
 
@@ -486,14 +486,14 @@ export default function Dashboard() {
               title={t('admin.title')}
               style={{ color: 'var(--accent)' }}
             >
-              <Shield size={18} />
+              <Shield size={16} />
             </button>
           )}
-          <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '2px', alignItems: 'center' }}>
             <ThemeSwitcher />
             <LanguageSwitcher />
             <button className="btn-icon" onClick={signOut} title={t('auth.logout')}>
-              <LogOut size={18} />
+              <LogOut size={16} />
             </button>
           </div>
         </div>
@@ -572,7 +572,7 @@ export default function Dashboard() {
         )}
 
         {/* Attribution Footer */}
-        <div style={{ marginTop: 'auto', padding: '12px', borderTop: '1px solid var(--border)', fontSize: '12px', color: 'var(--text-muted)', textAlign: 'center', background: 'var(--panel-bg)' }}>
+        <div style={{ marginTop: 'auto', padding: '8px 12px', borderTop: '1px solid var(--border)', fontSize: '10px', color: 'var(--text-muted)', textAlign: 'center', background: 'var(--panel-bg)' }}>
           Made with ♥ by{' '}
           <a href="https://github.com/iitold/findinthehome" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', fontWeight: 600, textDecoration: 'none' }}>
             itold
@@ -586,7 +586,7 @@ export default function Dashboard() {
           
           {/* BREADCRUMB / BACK NAVIGATION */}
           {breadcrumb.length > 0 && (
-            <div className="breadcrumb-nav" style={{ padding: '12px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--bg-glass)', backdropFilter: 'blur(10px)', zIndex: 10 }}>
+            <div className="breadcrumb-nav" style={{ padding: '8px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--bg-glass)', backdropFilter: 'blur(10px)', zIndex: 10 }}>
               <button 
                 onClick={() => {
                   const parent = breadcrumb.length > 1 ? breadcrumb[breadcrumb.length - 2] : null;
@@ -594,26 +594,26 @@ export default function Dashboard() {
                   if (parent && parent.type === 'floor') canvas.setSelectedFloorZ(parent.z);
                   else if (!parent) canvas.setSelectedFloorZ(null);
                 }}
-                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 12px', background: 'var(--panel-bg)', border: '1px solid var(--border)', borderRadius: '20px', color: 'var(--text-primary)', fontSize: '13px', fontWeight: 500, transition: 'background 0.2s' }}
+                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px', padding: '4px 10px', background: 'var(--panel-bg)', border: '1px solid var(--border)', borderRadius: '20px', color: 'var(--text-primary)', fontSize: '11px', fontWeight: 500, transition: 'background 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-hover)'}
                 onMouseLeave={e => e.currentTarget.style.background = 'var(--panel-bg)'}
               >
-                <ChevronLeft size={16} /> Quay lại
+                <ChevronLeft size={14} /> Quay lại
               </button>
               
-              <div style={{ width: '1px', height: '16px', background: 'var(--border)', margin: '0 8px' }} />
+              <div style={{ width: '1px', height: '14px', background: 'var(--border)', margin: '0 4px' }} />
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflowX: 'auto', whiteSpace: 'nowrap', paddingBottom: '2px', flex: 1 }} className="hide-scrollbar">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', overflowX: 'auto', whiteSpace: 'nowrap', paddingBottom: '1px', flex: 1 }} className="hide-scrollbar">
                 <button 
                   onClick={() => { navigateTo(null); canvas.setSelectedFloorZ(null); }}
-                  style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', fontSize: '13px' }}
+                  style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', fontSize: '11px' }}
                 >
-                  <Home size={14} />
+                  <Home size={12} />
                 </button>
                 
                 {breadcrumb.map((item, index) => (
-                  <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <ChevronRight size={14} style={{ color: 'var(--text-muted)' }} />
+                  <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <ChevronRight size={12} style={{ color: 'var(--text-muted)' }} />
                     <button
                       onClick={() => {
                         navigateTo(item);
@@ -623,8 +623,8 @@ export default function Dashboard() {
                         background: 'none', border: 'none', 
                         color: index === breadcrumb.length - 1 ? 'var(--text-primary)' : 'var(--text-secondary)',
                         fontWeight: index === breadcrumb.length - 1 ? 600 : 400,
-                        cursor: 'pointer', fontSize: '13px',
-                        maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
+                        cursor: 'pointer', fontSize: '11px',
+                        maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
                       }}
                     >
                       {item.name}
@@ -758,14 +758,14 @@ export default function Dashboard() {
             setMobileDrawerOpen(false);
           }}
         >
-          <Home size={20} />
+          <Home size={18} />
           <span>{t('nav.home') || 'Trang chủ'}</span>
         </button>
         <button 
           className={`mobile-nav-btn ${mobileDrawerOpen && canvas.mode !== 'search' ? 'active' : ''}`}
           onClick={() => { canvas.setMode('view'); setMobileDrawerOpen(true); }}
         >
-          <Menu size={20} />
+          <Menu size={18} />
           <span>{t('nav.menu') || 'Menu'}</span>
         </button>
       </nav>
