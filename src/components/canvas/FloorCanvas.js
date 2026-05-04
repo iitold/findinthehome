@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useEffect, useState, useMemo, useCallback } from 'react';
 import { Stage, Layer, Rect, Text, Transformer } from 'react-konva';
 import RoomShape from './RoomShape';
 import ContainerShape from './ContainerShape';
@@ -13,7 +13,7 @@ import { useTheme } from '@/lib/theme/ThemeContext';
 /**
  * FloorCanvas — Canvas 2D chính sử dụng React-Konva v8
  * Render entities theo tầng (z filter)
- * Hỗ trợ zoom, pan, edit mode, và search highlight
+ * Hỗ trợ zoom, pan, edit mode, search highlight, và parent-child drag
  */
 export default function FloorCanvas({
   entities,
@@ -36,7 +36,9 @@ export default function FloorCanvas({
   isValidDrop,
 }) {
   const containerRef = useRef(null);
+  const stageRef = useRef(null);
   const trRef = useRef(null);
+  const dragInfoRef = useRef(null); // Track descendants during drag
   const [stageSize, setStageSize] = useState({ width: 800, height: 600 });
   const isEditMode = mode === 'edit';
   const { theme } = useTheme();
@@ -63,13 +65,12 @@ export default function FloorCanvas({
       trRef.current.nodes([]);
       trRef.current.getLayer().batchDraw();
     }
-  }, [isEditMode, selectedEntity, scale, position]); // Phụ thuộc thêm scale/pos để gắn lại khi zoom/pan nếu cần
+  }, [isEditMode, selectedEntity, scale, position]);
 
   // Lấy danh sách con cháu của selectedEntity để tính Bounding Box chặn Resize
   const childrenBBox = useMemo(() => {
     if (!selectedEntity || !isEditMode) return null;
     
-    // Tìm tất cả các entity nằm trong selectedEntity
     const descendants = entities.filter(e => 
       e.id !== selectedEntity.id &&
       e.path && selectedEntity.path &&
@@ -80,7 +81,7 @@ export default function FloorCanvas({
 
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
     descendants.forEach(d => {
-      const w = d.width || 0.3; // fallback 0.3m
+      const w = d.width || 0.3;
       const h = d.height || 0.3;
       if (d.x < minX) minX = d.x;
       if (d.y < minY) minY = d.y;
@@ -134,6 +135,76 @@ export default function FloorCanvas({
   const containers = floorEntities.filter(e => e.type === 'container');
   const items = floorEntities.filter(e => e.type === 'item');
 
+  // === PARENT-CHILD DRAG: Setup descendants on drag start ===
+  const handleChildDragStart = useCallback((entityId) => {
+    const draggedEntity = entities.find(e => e.id === entityId);
+    if (!draggedEntity) { onDragStart(entityId); return; }
+
+    // Find all descendants (children, grandchildren, etc.)
+    const descendants = entities.filter(e =>
+      e.id !== entityId &&
+      e.path && draggedEntity.path &&
+      e.path.startsWith(draggedEntity.path)
+    );
+
+    // Store original positions for delta calculation
+    dragInfoRef.current = {
+      entityId,
+      startX: draggedEntity.x,
+      startY: draggedEntity.y,
+      descendants: descendants.map(d => ({
+        id: d.id,
+        startX: d.x,
+        startY: d.y,
+        type: d.type,
+      })),
+    };
+
+    onDragStart(entityId);
+  }, [entities, onDragStart]);
+
+  // === PARENT-CHILD DRAG: Move descendants imperatively during drag ===
+  const handleChildDragMove = useCallback((entityId, newX, newY) => {
+    // Move descendants visually via Konva API (no React re-render needed)
+    if (dragInfoRef.current && dragInfoRef.current.entityId === entityId && stageRef.current) {
+      const dx = newX - dragInfoRef.current.startX;
+      const dy = newY - dragInfoRef.current.startY;
+      const stage = stageRef.current;
+
+      dragInfoRef.current.descendants.forEach(desc => {
+        const node = stage.findOne(`#${desc.id}`);
+        if (node) {
+          const padding = desc.type === 'container' ? 2 : 0;
+          node.x((desc.startX + dx) * METERS_TO_PIXELS + padding);
+          node.y((desc.startY + dy) * METERS_TO_PIXELS + padding);
+        }
+      });
+    }
+
+    onDragMove(entityId, newX, newY);
+  }, [onDragMove]);
+
+  // === PARENT-CHILD DRAG: Report all descendants on drag end ===
+  const handleChildDragEnd = useCallback((entityId, newX, newY) => {
+    let descendantUpdates = [];
+
+    if (dragInfoRef.current && dragInfoRef.current.entityId === entityId) {
+      const dx = newX - dragInfoRef.current.startX;
+      const dy = newY - dragInfoRef.current.startY;
+
+      if (dx !== 0 || dy !== 0) {
+        descendantUpdates = dragInfoRef.current.descendants.map(desc => ({
+          id: desc.id,
+          x: desc.startX + dx,
+          y: desc.startY + dy,
+        }));
+      }
+    }
+
+    dragInfoRef.current = null;
+    onDragEnd(entityId, newX, newY, descendantUpdates);
+  }, [onDragEnd]);
+
   // Zoom bằng scroll wheel
   const handleWheel = (e) => {
     e.evt.preventDefault();
@@ -148,7 +219,6 @@ export default function FloorCanvas({
 
     const clampedScale = Math.max(0.1, Math.min(5, newScale));
 
-    // Zoom vào con trỏ chuột
     const mousePointTo = {
       x: (pointer.x - position.x) / oldScale,
       y: (pointer.y - position.y) / oldScale,
@@ -165,6 +235,7 @@ export default function FloorCanvas({
     <div ref={containerRef} className="canvas-container" style={{ width: '100%', height: '100%', minHeight: 100 }}>
       {stageSize.width > 1 && stageSize.height > 1 && (
         <Stage
+        ref={stageRef}
         width={stageSize.width}
         height={stageSize.height}
         scaleX={scale}
@@ -174,7 +245,6 @@ export default function FloorCanvas({
         draggable={!isEditMode}
         onWheel={handleWheel}
         onDragEnd={(e) => {
-          // Chỉ pan khi kéo Stage (không phải entity)
           if (e.target === e.target.getStage()) {
             setPosition({
               x: e.target.x(),
@@ -183,7 +253,6 @@ export default function FloorCanvas({
           }
         }}
         onClick={(e) => {
-          // Click vào vùng trống → bỏ chọn
           if (e.target === e.target.getStage()) {
             onSelectEntity?.(null);
           }
@@ -217,9 +286,9 @@ export default function FloorCanvas({
               isHighlighted={highlightedEntity === entity.id}
               isSearchHighlighted={highlightedRoomId === entity.id}
               onSelect={onSelectEntity}
-              onDragStart={onDragStart}
-              onDragMove={onDragMove}
-              onDragEnd={onDragEnd}
+              onDragStart={handleChildDragStart}
+              onDragMove={handleChildDragMove}
+              onDragEnd={handleChildDragEnd}
               editMode={isEditMode}
               isDragged={draggedEntityId === entity.id}
               dragLocked={!!draggedEntityId && draggedEntityId !== entity.id}
@@ -229,7 +298,7 @@ export default function FloorCanvas({
             />
           ))}
 
-          {/* Render doors & windows (lớp kiến trúc, trên tường) */}
+          {/* Render doors & windows */}
           {doors.map(entity => (
             <DoorShape
               key={entity.id}
@@ -237,9 +306,9 @@ export default function FloorCanvas({
               isSelected={selectedEntity?.id === entity.id}
               isHighlighted={highlightedEntity === entity.id}
               onSelect={onSelectEntity}
-              onDragStart={onDragStart}
-              onDragMove={onDragMove}
-              onDragEnd={onDragEnd}
+              onDragStart={handleChildDragStart}
+              onDragMove={handleChildDragMove}
+              onDragEnd={handleChildDragEnd}
               editMode={isEditMode}
               dragLocked={!!draggedEntityId && draggedEntityId !== entity.id}
               theme={theme}
@@ -253,9 +322,9 @@ export default function FloorCanvas({
               isSelected={selectedEntity?.id === entity.id}
               isHighlighted={highlightedEntity === entity.id}
               onSelect={onSelectEntity}
-              onDragStart={onDragStart}
-              onDragMove={onDragMove}
-              onDragEnd={onDragEnd}
+              onDragStart={handleChildDragStart}
+              onDragMove={handleChildDragMove}
+              onDragEnd={handleChildDragEnd}
               editMode={isEditMode}
               dragLocked={!!draggedEntityId && draggedEntityId !== entity.id}
               theme={theme}
@@ -270,9 +339,9 @@ export default function FloorCanvas({
               isSelected={selectedEntity?.id === entity.id}
               isHighlighted={highlightedEntity === entity.id}
               onSelect={onSelectEntity}
-              onDragStart={onDragStart}
-              onDragMove={onDragMove}
-              onDragEnd={onDragEnd}
+              onDragStart={handleChildDragStart}
+              onDragMove={handleChildDragMove}
+              onDragEnd={handleChildDragEnd}
               editMode={isEditMode}
               isDragged={draggedEntityId === entity.id}
               dragLocked={!!draggedEntityId && draggedEntityId !== entity.id}
@@ -290,9 +359,9 @@ export default function FloorCanvas({
               isSelected={selectedEntity?.id === entity.id}
               isHighlighted={highlightedEntity === entity.id}
               onSelect={onSelectEntity}
-              onDragStart={onDragStart}
-              onDragMove={onDragMove}
-              onDragEnd={onDragEnd}
+              onDragStart={handleChildDragStart}
+              onDragMove={handleChildDragMove}
+              onDragEnd={handleChildDragEnd}
               editMode={isEditMode}
               isDragged={draggedEntityId === entity.id}
               dragLocked={!!draggedEntityId && draggedEntityId !== entity.id}
@@ -307,24 +376,14 @@ export default function FloorCanvas({
             <Transformer
               ref={trRef}
               boundBoxFunc={(oldBox, newBox) => {
-                // Kích thước tối thiểu: 0.5m x 0.5m (25px x 25px)
                 if (newBox.width < 25 || newBox.height < 25) {
                   return oldBox;
                 }
 
-                // Giới hạn resize không được cắt vào đồ vật bên trong
                 if (childrenBBox) {
-                  // Chỉ chặn khi người dùng cố tình "bóp nhỏ" (shrink) phòng/hộp lấn qua đồ vật.
-                  // Nếu người dùng đang phóng to (enlarge), ta luôn cho phép.
-                  // Điều này tránh việc container có padding làm cho childrenBBox nhô ra 2px và khóa vĩnh viễn resize.
-                  
-                  // Chặn không cho tường trái lấn qua đồ vật (khi đang kéo sang phải)
                   if (newBox.x > childrenBBox.x && newBox.x > oldBox.x) return oldBox;
-                  // Chặn không cho tường trên lấn qua đồ vật (khi đang kéo xuống dưới)
                   if (newBox.y > childrenBBox.y && newBox.y > oldBox.y) return oldBox;
-                  // Chặn không cho tường phải lấn qua đồ vật (khi đang kéo sang trái)
                   if (newBox.x + newBox.width < childrenBBox.maxX && newBox.x + newBox.width < oldBox.x + oldBox.width) return oldBox;
-                  // Chặn không cho tường dưới lấn qua đồ vật (khi đang kéo lên trên)
                   if (newBox.y + newBox.height < childrenBBox.maxY && newBox.y + newBox.height < oldBox.y + oldBox.height) return oldBox;
                 }
 
@@ -337,7 +396,6 @@ export default function FloorCanvas({
                 const scaleX = node.scaleX();
                 const scaleY = node.scaleY();
                 
-                // Reset scale về 1 để chữ không bị biến dạng vĩnh viễn
                 node.scaleX(1);
                 node.scaleY(1);
 
@@ -345,11 +403,6 @@ export default function FloorCanvas({
                 const entity = floorEntities.find(ent => ent.id === id);
                 if (!entity) return;
 
-                // Nếu là ContainerShape thì nó có Padding, nhưng toạ độ x của Group đã gồm padding.
-                // Tuy nhiên, Transformer scale theo Group size (bao gồm cả x, y của group).
-                // Do ContainerShape có Group: x = entity.x * 50 + PADDING, width = entity.width * 50 - 2*PADDING.
-                // Thực tế Node là Group, width lúc scale sẽ được nhân lên.
-                // Làm tròn 2 chữ số thập phân (VD: 4.99999 -> 5.00)
                 const round2 = (num) => Math.round(num * 100) / 100;
 
                 const newX = round2(entity.x + (node.x() - (entity.x * METERS_TO_PIXELS + (entity.type === 'container' ? 2 : 0))) / METERS_TO_PIXELS);
@@ -373,33 +426,27 @@ export default function FloorCanvas({
  * GridLines — Lưới nền cho canvas
  */
 function GridLines({ width, height, gridColor = '#94A3B8', gridOpacity = 0.15 }) {
-  const gridSize = METERS_TO_PIXELS; // 1 mét = 1 ô lưới
+  const gridSize = METERS_TO_PIXELS;
   const lines = [];
 
-  // Vertical lines
   for (let x = 0; x < width; x += gridSize) {
     lines.push(
       <Rect
         key={`v-${x}`}
-        x={x}
-        y={0}
-        width={1}
-        height={height}
+        x={x} y={0}
+        width={1} height={height}
         fill={gridColor}
         opacity={gridOpacity}
       />
     );
   }
 
-  // Horizontal lines
   for (let y = 0; y < height; y += gridSize) {
     lines.push(
       <Rect
         key={`h-${y}`}
-        x={0}
-        y={y}
-        width={width}
-        height={1}
+        x={0} y={y}
+        width={width} height={1}
         fill={gridColor}
         opacity={gridOpacity}
       />

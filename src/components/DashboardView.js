@@ -125,8 +125,8 @@ export default function Dashboard() {
     }
   }, [allEntities, canvas.selectedFloorZ]);
 
-  // Xử lý kéo thả entity
-  const handleDragEnd = useCallback(async (entityId, newX, newY) => {
+  // Xử lý kéo thả entity (với parent-child movement)
+  const handleDragEnd = useCallback(async (entityId, newX, newY, descendantUpdates = []) => {
     const draggedEntity = allEntities.find(e => e.id === entityId);
     
     // Reset states
@@ -152,17 +152,12 @@ export default function Dashboard() {
       const candidates = allEntities.filter(c => {
         if (c.id === entityId) return false;
         if (c.z !== canvas.selectedFloorZ) return false;
-        // Tránh lỗi circular reference (chọn con cháu làm cha)
         if (c.path && draggedEntity.path && c.path.startsWith(draggedEntity.path)) return false;
-        // Chỉ phòng hoặc hộp mới có thể chứa
         if (c.type !== 'room' && c.type !== 'container') return false;
-
-        // Kiểm tra xem tâm của vật bị kéo có nằm trong ứng viên này không
         const inBounds = cx >= c.x && cx <= c.x + c.width && cy >= c.y && cy <= c.y + c.height;
         return inBounds;
       });
 
-      // Ưu tiên vật chứa nhỏ nhất (để thả trúng hộp nhỏ nằm trong phòng lớn)
       candidates.sort((a, b) => (a.width * a.height) - (b.width * b.height));
 
       if (candidates.length > 0) {
@@ -171,14 +166,26 @@ export default function Dashboard() {
           updateData.parent_id = newParent.id;
         }
       } else {
-        // Rớt ra ngoài phòng -> Invalid drop
         addToast(t('errors.INVALID_TYPE_HIERARCHY') || 'Cannot place item outside of a room', 'error');
-        // Force refresh to snap back
         setAllEntities([...allEntities]);
         return;
       }
     }
 
+    // === Optimistic UI: Update allEntities with new positions ===
+    if (descendantUpdates.length > 0) {
+      const descMap = new Map(descendantUpdates.map(d => [d.id, { x: round2(d.x), y: round2(d.y) }]));
+      setAllEntities(prev => prev.map(e => {
+        if (e.id === entityId) return { ...e, x: roundedX, y: roundedY };
+        if (descMap.has(e.id)) {
+          const pos = descMap.get(e.id);
+          return { ...e, x: pos.x, y: pos.y };
+        }
+        return e;
+      }));
+    }
+
+    // Update parent entity
     const result = await updateEntity(entityId, updateData);
     if (result) {
       if (updateData.parent_id && updateData.parent_id !== draggedEntity.parent_id) {
@@ -187,6 +194,19 @@ export default function Dashboard() {
       } else {
         addToast(t('toast.updated'), 'success');
       }
+
+      // === Batch update descendants positions ===
+      if (descendantUpdates.length > 0) {
+        const updatePromises = descendantUpdates.map(desc =>
+          fetch(`/api/entities/${desc.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ x: round2(desc.x), y: round2(desc.y) }),
+          }).catch(() => null) // Silent fail for individual descendants
+        );
+        await Promise.all(updatePromises);
+      }
+
       loadTree();
     }
   }, [allEntities, canvas.selectedFloorZ, updateEntity, addToast, t, loadTree]);

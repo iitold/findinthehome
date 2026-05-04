@@ -329,7 +329,6 @@ export default function ContainerShape({
       x={x}
       y={y}
       draggable={editMode && !dragLocked}
-      listening={!dragLocked}
       opacity={opacity}
       onClick={() => onSelect?.(entity)}
       onTap={() => onSelect?.(entity)}

@@ -71,7 +71,6 @@ export default function DoorShape({
       y={y}
       rotation={rotation}
       draggable={editMode && !entity.is_fixed && !dragLocked}
-      listening={!dragLocked}
       id={entity.id}
       onClick={(e) => {
         e.cancelBubble = true;
